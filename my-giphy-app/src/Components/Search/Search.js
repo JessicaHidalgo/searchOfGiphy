@@ -1,14 +1,17 @@
 import React, { Component } from "react";
-import { Input, Label, Button } from "reactstrap";
+import { Input, Label, Button, Row, Col } from "reactstrap";
 //Import the function from our service getGiphy
 import {getGiphy} from '../Server/getGiphy';
 import { BrowserRouter as Router } from "react-router-dom";
+import Gif from './Display';
 
 class Search extends Component {
   constructor(props) {
     super(props);
     this.state = 
-      {gifname:""};
+      {gifname:"",
+       data :[]
+    };
   }
 
   onChange = e => {
@@ -17,15 +20,25 @@ class Search extends Component {
       gifname
     });
   };
-
   onClick = async(e) =>{
     e.preventDefault()
     const {gifname}= this.state
-    console.log(gifname)
+    console.log(gifname);
+    const parent= this;
+    
+    try{
 
-  }
+        const data= await getGiphy(gifname)
+          parent.setState({data:data})
+            
+        
+        console.log(data)   
+    }catch(err){
+        this.gifname = false;}
 
+    }
   render() {
+    const data = this.state.data;
     return (
       <Router>
         <Label for="giphy">GET YOUR GIPHY</Label>
@@ -35,13 +48,21 @@ class Search extends Component {
           value={this.state.gifname}
           placeholder="Name your giphy!!"
           onChange={this.onChange}
-        >
-          
-        </Input>
+        />  
         <Button onClick={this.onClick}>GET</Button>
+        {data.map(p=>(
+              <Row>
+                  <Col md='6'></Col>
+                  <img src={p.images.original}/>
+                  
+              </Row>
+          )) } 
       </Router>
+     
     );
-  }
+
+  } 
+  
 }
 
 export default Search;

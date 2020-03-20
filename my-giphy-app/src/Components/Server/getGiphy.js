@@ -1,13 +1,17 @@
-import axios from 'axios';
+const axios = require('axios')
 //Define an async function to get the data using axios
-async function getGiphy(gifname){
+ function getGiphy(gifname){
    
-    const response = await axios.get(`"http://api.giphy.com/v1/gifs/search?q=${gifname}&api_key=
-    nJ61VQellwL2APoHnuC20pLXFOFF20VW&limit=5"`)
+    const response =  axios.get('http://api.giphy.com/v1/gifs/search',{params:{
+      q:gifname, api_key :'nJ61VQellwL2APoHnuC20pLXFOFF20VW', limit :10
+    }}).then(function (response){
+      console.log(response.data)
+      return response
+    })
 
-    console.log(response)
-
-    return response
+  
 }
 //Export the function
-export default getGiphy;
+module.exports={
+    getGiphy
+ }
