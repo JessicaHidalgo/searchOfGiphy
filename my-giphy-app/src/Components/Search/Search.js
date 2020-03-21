@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Input, Label, Button, Row, Col } from "reactstrap";
+import { Input, Label, Button, Container} from "reactstrap";
 //Import the function from our service getGiphy
 import {getGiphy} from '../Server/getGiphy';
 import { BrowserRouter as Router } from "react-router-dom";
@@ -27,20 +27,24 @@ class Search extends Component {
     const parent= this;
     
     try{
-
         const data= await getGiphy(gifname)
-          parent.setState({data:data})
-            
-        
-        console.log(data)   
+          parent.setState({data:[...data.data]})
+   
     }catch(err){
         this.gifname = false;}
 
     }
+    
+  mapData= () => { this.state.data.map(function(x){
+    return(
+    
+    <img height="50" width="200" src={x.images.original.url}/>);
+})}
+ 
   render() {
     const data = this.state.data;
     return (
-      <Router>
+      <>
         <Label for="giphy">GET YOUR GIPHY</Label>
         <Input
           type="text"
@@ -49,15 +53,12 @@ class Search extends Component {
           placeholder="Name your giphy!!"
           onChange={this.onChange}
         />  
-        <Button onClick={this.onClick}>GET</Button>
-        {data.map(p=>(
-              <Row>
-                  <Col md='6'></Col>
-                  <img src={p.images.original}/>
-                  
-              </Row>
-          )) } 
-      </Router>
+        <Button onClick={this.onClick}>GET</Button> 
+        <Container>
+        {this.mapData()}
+        </Container>
+        
+      </>
      
     );
 

@@ -1,28 +1,27 @@
 import React,{Component} from 'react';
-import {Container, Row, Col} from 'reactstrap';
+import {Row,Col} from 'reactstrap';
 
 class Gif extends Component{
     constructor(props){
         super(props)
         this.state={
-            data:[]
+            gifs:[]
         }
     }
     
     render(){
-        const gif=this.props.gif
         
-        return <Container>
-        {
-          gif.map(p=>(
-              <Row>
-                  <Col md='6'></Col>
-                  <img src={p.images.original}/>
-                  
-              </Row>
-          ))  
-        }
-        </Container>
+        
+        return (
+            <ul>
+                {this.state.gifs.map((gif)=>
+                <Col md={6}>
+                <img src={gif.data.images.original.url}/>
+                </Col>
+                )}
+             
+            </ul>
+        )
     }
 
 }
