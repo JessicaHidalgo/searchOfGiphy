@@ -1,69 +1,70 @@
 import React, { Component } from "react";
-import { Input, Label, Button, Container} from "reactstrap";
+import { Input, Label, Button, Container } from "reactstrap";
+import axios from "axios";
 //Import the function from our service getGiphy
-import {getGiphy} from '../Server/getGiphy';
-import { BrowserRouter as Router } from "react-router-dom";
-import Gif from './Display';
+import { getGiphy } from "../Server/getGiphy";
 
 class Search extends Component {
   constructor(props) {
     super(props);
-    this.state = 
-      {gifname:"",
-       data :[]
-    };
+    this.state = { gifName: "", gifList: [] };
+    this.onChange = this.onChange.bind(this);
+    this.onClick = this.onClick.bind(this);
   }
 
   onChange = e => {
-    const gifname = e.target.value;
+    const gifName = e.target.value;
     this.setState({
-      gifname
+      gifName
     });
   };
-  onClick = async(e) =>{
-    e.preventDefault()
-    const {gifname}= this.state
-    console.log(gifname);
-    const parent= this;
-    
-    try{
-        const data= await getGiphy(gifname)
-          parent.setState({data:[...data.data]})
-   
-    }catch(err){
-        this.gifname = false;}
 
-    }
+   onClick() {
+     console.log(this.state.gifName);
+      axios.get("http://api.giphy.com/v1/gifs/search", {
+      params: {
+        q: this.state.gifName,
+        api_key: "nJ61VQellwL2APoHnuC20pLXFOFF20VW",
+        limit: 10
+      }
+    }).then(response=>{
+      console.log(response);
+      this.setState({ gifList: response.data.data });
+    });
+
     
-  mapData= () => { this.state.data.map(function(x){
-    return(
+  }
+
+  mapData() {
     
-    <img height="50" width="200" src={x.images.original.url}/>);
-})}
- 
-  render() {
-    const data = this.state.data;
     return (
-      <>
+      <div>
+        {this.state.gifList.map(gif => (
+          <div>
+          <li>{gif.id}</li>
+          <img src={gif.images.downsized.url}/>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  render() {
+    return (
+      <div>
         <Label for="giphy">GET YOUR GIPHY</Label>
         <Input
           type="text"
           name="giphy"
-          value={this.state.gifname}
+          value={this.state.gifName}
           placeholder="Name your giphy!!"
           onChange={this.onChange}
-        />  
-        <Button onClick={this.onClick}>GET</Button> 
-        <Container>
-        {this.mapData()}
-        </Container>
-        
-      </>
-     
+        />
+        <Button onClick={this.onClick}>GET</Button>
+        {this.state.gifList ? this.mapData() : "Loading...."}
+      </div>
     );
-
-  } 
-  
+  }
 }
 
 export default Search;

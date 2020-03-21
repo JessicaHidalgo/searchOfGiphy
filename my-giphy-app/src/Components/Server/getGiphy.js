@@ -8,7 +8,7 @@ const axios = require('axios')
 
     console.log(response)
       
-      return response
+      return response.data
   
 
   
