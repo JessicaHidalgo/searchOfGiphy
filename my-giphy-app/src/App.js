@@ -1,20 +1,24 @@
-import React, {Component} from 'react';
-import { BrowserRouter as Router} from "react-router-dom";
-import Search from '../src/Components/Search/Search'
+import React, { Component } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import Search from "../src/Components/Search/Search";
+import giphy from "../src/giphy.svg";
 
-import './App.css';
+import "./App.scss";
 
 class App extends Component {
-  render (){
+  render() {
     return (
       <Router>
-       <h1>Hello</h1>
-       <Search></Search>
+        <div className="logo">
+          <img src={giphy} />
+
+          <h1>YOUR GIPHY SEARCH APP</h1>
+        </div>
         
-       
-      
-        </Router>
-    )};
+        <Search></Search>
+      </Router>
+    );
+  }
 }
 
 export default App;

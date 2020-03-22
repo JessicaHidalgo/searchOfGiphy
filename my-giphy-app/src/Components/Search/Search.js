@@ -1,10 +1,8 @@
 import React, { Component } from "react";
-import { Input, Label, Button, Container } from "reactstrap";
+import { Input, Label, Button} from "reactstrap";
 import axios from "axios";
-import { Grid } from '@giphy/react-components'
+
 //Import the function from our service getGiphy
-import { getGiphy } from "../Server/getGiphy";
-import app from '../../App.css';
 
 class Search extends Component {
   constructor(props) {
@@ -21,42 +19,39 @@ class Search extends Component {
     });
   };
 
-   onClick() {
-     console.log(this.state.gifName);
-      axios.get("http://api.giphy.com/v1/gifs/search", {
-      params: {
-        q: this.state.gifName,
-        api_key: "nJ61VQellwL2APoHnuC20pLXFOFF20VW",
-        limit: 10
-      }
-    }).then(response=>{
-      console.log(response);
-      this.setState({ gifList: response.data.data });
-    });
-
-    
+  onClick() {
+    console.log(this.state.gifName);
+    axios
+      .get("http://api.giphy.com/v1/gifs/search", {
+        params: {
+          q: this.state.gifName,
+          api_key: "nJ61VQellwL2APoHnuC20pLXFOFF20VW",
+          limit: 25
+        }
+      })
+      .then(response => {
+        console.log(response);
+        this.setState({ gifList: response.data.data });
+      });
   }
 
   mapData() {
-    
     return (
-      <div>
+      <section id="grid-images">
         {this.state.gifList.map(gif => (
-          
-          <div class='container'>
-          <li>{gif.id}</li>
-          <img src={gif.images.downsized.url}/>
+          <div>
+            <img className="photo" src={gif.images.downsized.url} />
           </div>
-          
         ))}
-      </div>
-     
+      </section>
     );
   }
 
   render() {
     return (
-      <div>
+      <div className='renderSearchComponents'>
+     
+        
         <Label for="giphy">GET YOUR GIPHY</Label>
         <Input
           type="text"
@@ -65,9 +60,12 @@ class Search extends Component {
           placeholder="Name your giphy!!"
           onChange={this.onChange}
         />
-        <Button onClick={this.onClick}>GET</Button>
+        
+        <Button color="secondary" onClick={this.onClick}>GET</Button>
+        
+        
         {this.state.gifList ? this.mapData() : "Loading...."}
-      </div>
+        </div>
     );
   }
 }
