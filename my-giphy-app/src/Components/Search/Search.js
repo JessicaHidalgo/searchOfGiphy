@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Input, Label, Button, Container } from "reactstrap";
 import axios from "axios";
+import { Grid } from '@giphy/react-components'
 //Import the function from our service getGiphy
 import { getGiphy } from "../Server/getGiphy";
+import app from '../../App.css';
 
 class Search extends Component {
   constructor(props) {
@@ -40,12 +42,15 @@ class Search extends Component {
     return (
       <div>
         {this.state.gifList.map(gif => (
-          <div>
+          
+          <div class='container'>
           <li>{gif.id}</li>
           <img src={gif.images.downsized.url}/>
           </div>
+          
         ))}
       </div>
+     
     );
   }
 
